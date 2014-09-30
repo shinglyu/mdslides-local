@@ -1,9 +1,11 @@
+#!/bin/bash
 #Required: inotify-tools
 #TODO: check if no argument 
 
 #content=$(echo $1 | sed "s/-----/<\/section><section data-markdown>/g" )
 #cat $1 | sed "s/-----/bla/g")
-tmpdir=/tmp/slide$(date +%s |md5sum |cut -d ' ' -f 1)
+#tmpdir=/tmp/slide$(date +%s |md5sum |cut -d ' ' -f 1)
+tmpdir=/tmp/slides$(date +%s%N |md5sum |cut -c 1-6)
 trap "echo 'Cleaning up...'; rm -r $tmpdir; exit" SIGINT SIGQUIT
 
 if [ $# -eq 0  ]
