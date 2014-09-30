@@ -18,7 +18,7 @@ echo "md to reveal.js compiler started"
 script_dir=${0%/*}
 pushd $script_dir
 
-cp -r . $tmpdir
+rsync -rv --exclude=.git . $tmpdir
 popd
 
 cp $1 $tmpdir/tmp.md
