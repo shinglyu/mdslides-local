@@ -1,11 +1,8 @@
 #!/bin/bash
-#Required: inotify-tools
-#TODO: check if no argument 
 
-#content=$(echo $1 | sed "s/-----/<\/section><section data-markdown>/g" )
-#cat $1 | sed "s/-----/bla/g")
-#tmpdir=/tmp/slide$(date +%s |md5sum |cut -d ' ' -f 1)
-tmpdir=/tmp/slides$(date +%s%N |md5sum |cut -c 1-6)
+tmpdir=/tmp/slides-$(date +%s%N |md5sum |cut -c 1-6) 
+
+#Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
 trap "echo 'Cleaning up...'; rm -r $tmpdir; exit" SIGINT SIGQUIT
 
 if [ $# -eq 0  ]
@@ -14,39 +11,40 @@ then
   echo "Usage: md2reveal.sh <md-file>"
   exit
 fi
-echo "md to reveal.js compiler started"
-script_dir=${0%/*}
 
-pushd $script_dir
-rsync -rv --exclude=.git . $tmpdir
-popd
+echo "mdslides started"
 
-firefox $tmpdir/$1.html #need to refresh once
+script_dir=${0%/*};
+#Copy reveal.js framework to temp dir
+pushd $script_dir;
+rsync -r --exclude=.git . $tmpdir;
+popd;
+
+firsttime=true;
 
 while true 
 do 
-  cp $1 $tmpdir/tmp.md
-  cp -r pic $tmpdir/pic
-  pushd $tmpdir
+  cp $1 $tmpdir/tmp.md;
+  cp -r pic $tmpdir/pic;
+
+  pushd $tmpdir;
 
   #Remove comments (lines start with '//')
-  grep -v "^//.*$" tmp.md >> tmp1.md
-  mv tmp1.md tmp.md
+  grep -v "^//.*$" tmp.md >> tmp1.md;
+  mv tmp1.md tmp.md;
 
-  sed -e "/Your content will be here./r tmp.md" -e "//d" $tmpdir/template.html> $tmpdir/$1.html 
-  echo "Compiled $1 to $1.html"
-  popd
+  #Put the content into the template
+  sed -e "/Your content will be here./r tmp.md" -e "//d" $tmpdir/template.html> $tmpdir/$1.html ;
+  echo "$1.html refreshed.";
 
-  inotifywait -e close_write $1 
+  popd;
+
+  if $firsttime
+  then
+    firefox $tmpdir/$1.html;
+    firsttime=false;
+  fi 
+
+  inotifywait -e close_write $1 ;
 done
-
-#This has a big limitation: if some program replaces myfile.py with a different file, rather than writing to the existing myfile, inotifywait will die. Most editors work that way.
-
-#To overcome this limitation, use inotifywait on the directory:
-
-#while true; do
-#   change=$(inotifywait -e close_write,moved_to,create .)
-#     change=${change#./ * }
-#    if [ "$change" = "myfile.py" ]; then ./myfile.py; fi
-# done
 
