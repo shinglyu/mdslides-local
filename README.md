@@ -3,7 +3,9 @@
 Creating HTML5 presentations using markdown syntax, no server needed.
 
 ## Installation
-Just run ``install.sh``
+* Edit ``config.sh``
+* Run ``install.sh``
+
 
 ## Usage
 * Create your presentation content as a markdown file
