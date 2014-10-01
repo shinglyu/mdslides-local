@@ -16,28 +16,28 @@ then
 fi
 echo "md to reveal.js compiler started"
 script_dir=${0%/*}
-pushd $script_dir
 
+pushd $script_dir
 rsync -rv --exclude=.git . $tmpdir
 popd
 
-cp $1 $tmpdir/tmp.md
-#echo "$content"
-pushd $tmpdir
-sed -e "/Your content will be here./r tmp.md" -e "//d" $tmpdir/template.html> $tmpdir/$1.html 
-echo "Compiled $1 to $1.html"
-popd
-
-firefox $tmpdir/$1.html
+firefox $tmpdir/$1.html #need to refresh once
 
 while true 
 do 
-  inotifywait -e close_write $1 
   cp $1 $tmpdir/tmp.md
+  cp -r pic $tmpdir/pic
   pushd $tmpdir
+
+  #Remove comments (lines start with '//')
+  grep -v "^//.*$" tmp.md >> tmp1.md
+  mv tmp1.md tmp.md
+
   sed -e "/Your content will be here./r tmp.md" -e "//d" $tmpdir/template.html> $tmpdir/$1.html 
   echo "Compiled $1 to $1.html"
   popd
+
+  inotifywait -e close_write $1 
 done
 
 #This has a big limitation: if some program replaces myfile.py with a different file, rather than writing to the existing myfile, inotifywait will die. Most editors work that way.
