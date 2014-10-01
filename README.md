@@ -1,4 +1,4 @@
-# Mdslides ## local edition
+# Mdslides - local edition
 
 Creating HTML5 presentations using markdown syntax, no server needed.
 
@@ -12,7 +12,8 @@ Just run ``install.sh``
 * ``mdslides`` will monitor the markdown file for changes, when you saved your markdown file, refresh the browser.
 * Press <kbd>ctrl</kbd>+<kbd>c</kbd> to stop ``mdslides``
 
+## Online Version
 You may also check the [online version](http://mdslides.herokuapp.com).
 
 ## Special Thanks
-This work is based on [refeal.js](https://github.com/hakimel/reveal.js/)
+This work is based on [reveal.js](https://github.com/hakimel/reveal.js/)
