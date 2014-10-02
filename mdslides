@@ -25,7 +25,7 @@ firsttime=true;
 while true 
 do 
   cp $1 $tmpdir/tmp.md;
-  cp -r pic $tmpdir/pic;
+  cp pic/* $tmpdir/pic;
 
   pushd $tmpdir;
 
