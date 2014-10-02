@@ -19,11 +19,6 @@
 
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
-    <style>
-      .reveal img {
-        max-height: 68vh;
-      }
-    </style>
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -82,13 +77,10 @@
 
     initReveal();
 
-    //adjust height to fit screen
-    $("img").each(function(id){
-      otherHeight = $(this).parent().parent().height() - $(this).height();
-      reaminHeight = $(window).height() - otherHeight - 250;
-      $(this).css("max-height",  remainHeight);
-    })
 
     </script>
+    <!--
+    <script src="js/image-size.js" type="text/javascript" charset="utf-8"></script>
+    -->
   </body>
 </html>
