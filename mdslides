@@ -18,6 +18,7 @@ script_dir=${0%/*};
 #Copy reveal.js framework to temp dir
 pushd $script_dir;
 rsync -r --exclude=.git . $tmpdir;
+mkdir $tmpdir/pic;
 popd;
 
 firsttime=true;
@@ -25,7 +26,7 @@ firsttime=true;
 while true 
 do 
   cp $1 $tmpdir/tmp.md;
-  cp pic/* $tmpdir/pic;
+  cp pic/* $tmpdir/pic/;
 
   pushd $tmpdir;
 
