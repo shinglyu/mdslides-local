@@ -1,5 +1,5 @@
 function fitImgs(){
-$("img").each(function(id){
+$("section.present img").each(function(id){
   //alert($(window).height())
   //console.log('window.height ' + $(window).height())
   //var otherHeight = -$(this).parentsUntil('section').height(); //don't count self's container's size
@@ -26,10 +26,9 @@ Reveal.addEventListener('slidechanged', function(event){
   // event.previousSlide, event.currentSlide, event.indexh, event.indexv
   fitImgs();
 })
-/*
 Reveal.addEventListener('ready', function(event){
   // event.previousSlide, event.currentSlide, event.indexh, event.indexv
   fitImgs();
 })
-*/
-fitImgs();
+
+//fitImgs();
