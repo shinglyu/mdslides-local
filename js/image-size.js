@@ -22,4 +22,14 @@ $("img").each(function(id){
 })
 }
 window.onresize = fitImgs;
+Reveal.addEventListener('slidechanged', function(event){
+  // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+  fitImgs();
+})
+/*
+Reveal.addEventListener('ready', function(event){
+  // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+  fitImgs();
+})
+*/
 fitImgs();
