@@ -1,5 +1,5 @@
 #!/bin/bash
-
+srcmd=$1
 tmpdir=/tmp/slides-$(date +%s%N |md5sum |cut -c 1-6) 
 
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
@@ -11,34 +11,48 @@ then
   echo "Usage: md2reveal.sh <md-file>"
   exit
 fi
+#echo "mdslides started"
 
-echo "mdslides started"
+prepareFramework(){
+    frameworkdir=$1;
+    destdir=$2;
+    #Copy reveal.js framework to temp dir
+    mkdir $destdir
+    pushd $frameworkdir;
+    rsync -r --exclude=.git --exclude=*.sh --exclude=mdslides . $destdir;
+    mkdir $destdir/pic;
+    popd;
+}
+
+
+compile(){
+    srcmd=$1
+    destdir=$2
+    cp $srcmd $destdir/tmp.md;
+    cp pic/* $destdir/pic/;
+
+    pushd $destdir;
+
+    #Remove comments (lines start with '//')
+    grep -v "^//.*$" tmp.md >> tmp1.md;
+    mv tmp1.md tmp.md;
+
+    #Put the content into the template
+    sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/template.html> $destdir/$srcmd.html ;
+    #echo "$1.html refreshed.";
+
+    popd;
+}
+
 
 script_dir=${0%/*};
-#Copy reveal.js framework to temp dir
-pushd $script_dir;
-rsync -r --exclude=.git . $tmpdir;
-mkdir $tmpdir/pic;
-popd;
+prepareFramework $script_dir $tmpdir
 
 firsttime=true;
 
 while true 
 do 
-  cp $1 $tmpdir/tmp.md;
-  cp pic/* $tmpdir/pic/;
-
-  pushd $tmpdir;
-
-  #Remove comments (lines start with '//')
-  grep -v "^//.*$" tmp.md >> tmp1.md;
-  mv tmp1.md tmp.md;
-
-  #Put the content into the template
-  sed -e "/Your content will be here./r tmp.md" -e "//d" $tmpdir/template.html> $tmpdir/$1.html ;
-  echo "$1.html refreshed.";
-
-  popd;
+  compile $srcmd $tmpdir
 
   if $firsttime
   then
