@@ -1,14 +1,19 @@
 #!/bin/bash
-srcmd=$1
-tmpdir=/tmp/slides-$(date +%s%N |md5sum |cut -c 1-6) 
+action=$1
+srcmd=$2
+tmpdir=slides-$(date +%s%N |md5sum |cut -c 1-6) 
 
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
 trap "echo 'Cleaning up...'; rm -r $tmpdir; exit" SIGINT SIGQUIT
 
-if [ $# -eq 0  ]
-then
+printHelp(){
   echo "No markdown file specified."
   echo "Usage: md2reveal.sh <md-file>"
+}
+
+if [ $# -le 1  ]
+then
+  printHelp
   exit
 fi
 #echo "mdslides started"
@@ -44,22 +49,43 @@ compile(){
     popd;
 }
 
+case "$action" in
+  "serve") 
+    script_dir=${0%/*};
+    fulltmpdir=/tmp/$tmpdir
+    prepareFramework $script_dir $fulltmpdir
 
-script_dir=${0%/*};
-prepareFramework $script_dir $tmpdir
+    firsttime=true;
 
-firsttime=true;
+    while true 
+    do 
+      compile $srcmd $fulltmpdir
 
-while true 
-do 
-  compile $srcmd $tmpdir
+      if $firsttime
+      then
+        firefox $fulltmpdir/$srcmd.html;
+        firsttime=false;
+      fi 
 
-  if $firsttime
-  then
-    firefox $tmpdir/$1.html;
-    firsttime=false;
-  fi 
+      inotifywait -e close_write $srcmd ;
+    done
+    ;;
+  "deploy")
+    script_dir=${0%/*}
+    pushd $script_dir
+    source config.sh
+    popd
 
-  inotifywait -e close_write $1 ;
-done
+    fulltmpdir=$dropbox_public_dir/$tmpdir
+    prepareFramework $script_dir $fulltmpdir
+    compile $srcmd $fulltmpdir
+
+    echo "Your slides are published to:"
+    echo "$dropbox_public_url_prefix/$tmpdir/$srcmd.html"
+    ;;
+  *)  
+      echo "Invalid action: " $action
+      printHelp
+esac
+
 
