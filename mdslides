@@ -38,9 +38,12 @@ compile(){
 
     pushd $destdir;
 
+    #Convert bg path to full path
+    sed -r "s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1
+    mv tmp.1 tmp.md
+
     #Remove comments (lines start with '//')
-    grep -v "^//.*$" tmp.md >> tmp1.md;
-    mv tmp1.md tmp.md;
+    sed -i "/^\/\/.*$/d" tmp.md
 
     #Put the content into the template
     sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/template.html> $destdir/$srcmd.html ;
