@@ -35,9 +35,13 @@ photo credit: [ihasb33r](http://www.flickr.com/photos/ihasb33r/2573196546/)
 [license](http://creativecommons.org/licenses/by-sa/2.0/deed.zh)
 
 ---
-////bg=http://farm3.staticflickr.com/2839/11467975375_a35815fea1_o_d.jpg
+//bg=http://farm3.staticflickr.com/2839/11467975375_a35815fea1_o_d.jpg
+##Full page images (online)
+
+---
+
 //bg=pic/taipei101.jpg
-##Full page images
+##Full page images (local)
 
 ---
 

@@ -33,14 +33,22 @@ prepareFramework(){
 compile(){
     srcmd=$1
     destdir=$2
+    isLocal=$3
     cp $srcmd $destdir/tmp.md;
     cp pic/* $destdir/pic/;
 
     pushd $destdir;
 
     #Convert bg path to full path
-    sed -r "s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1
+    #sed -r "s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1
+    if isLocal
+    then 
+      sed -r "/^\/\/bg=(#|http)/!  s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1 
+      mv tmp.1 tmp.md
+    fi
+    sed -r "s/\/\/bg=(.*)/<\!-- .slide:data-background=\"\1\" -->/g" tmp.md > tmp.1 tmp.md
     mv tmp.1 tmp.md
+
 
     #Remove comments (lines start with '//')
     sed -i "/^\/\/.*$/d" tmp.md
@@ -67,7 +75,7 @@ case "$action" in
 
     while true 
     do 
-      compile $srcmd $fulltmpdir
+      compile $srcmd $fulltmpdir true
 
       if $firsttime
       then
@@ -85,7 +93,7 @@ case "$action" in
 
     fulltmpdir=$dropbox_public_dir/$tmpdir
     prepareFramework $script_dir $fulltmpdir
-    compile $srcmd $fulltmpdir
+    compile $srcmd $fulltmpdir false
 
     echo "Your slides are published to:"
     echo "$dropbox_public_url_prefix/$tmpdir/$srcmd.html"
