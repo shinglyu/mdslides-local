@@ -11,7 +11,7 @@ printHelp(){
   echo "Usage: md2reveal.sh <md-file>"
 }
 
-if [ $# -le 1  ]
+if [ $# -lt 1  ]
 then
   printHelp
   exit
@@ -52,9 +52,14 @@ compile(){
     popd;
 }
 
+script_dir=${0%/*}
 case "$action" in
   "serve") 
-    script_dir=${0%/*};
+    if [ $# -lt 2  ]
+    then
+      printHelp
+      exit
+    fi
     fulltmpdir=/tmp/$tmpdir
     prepareFramework $script_dir $fulltmpdir
 
@@ -74,7 +79,6 @@ case "$action" in
     done
     ;;
   "deploy")
-    script_dir=${0%/*}
     pushd $script_dir
     source config.sh
     popd
@@ -85,6 +89,10 @@ case "$action" in
 
     echo "Your slides are published to:"
     echo "$dropbox_public_url_prefix/$tmpdir/$srcmd.html"
+    ;;
+  "init")
+    cp $script_dir/template.md .
+    # create pic folder?
     ;;
   *)  
       echo "Invalid action: " $action
