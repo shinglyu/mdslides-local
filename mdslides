@@ -46,7 +46,7 @@ compile(){
       sed -r "/^\/\/bg=(#|http)/!  s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1 
       mv tmp.1 tmp.md
     fi
-    sed -r "s/\/\/bg=(.*)/<\!-- .slide:data-background=\"\1\" -->/g" tmp.md > tmp.1 tmp.md
+    sed -r "s/\/\/bg=(.*)/<\!-- .slide:data-background=\"\1\" -->/g" tmp.md > tmp.1 
     mv tmp.1 tmp.md
 
 
