@@ -4,7 +4,6 @@ srcmd=$2
 tmpdir=slides-$(date +%s%N |md5sum |cut -c 1-6) 
 
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
-trap "echo 'Cleaning up...'; rm -r $tmpdir; exit" SIGINT SIGQUIT
 
 printHelp(){
   echo "No markdown file specified."
@@ -41,7 +40,7 @@ compile(){
 
     #Convert bg path to full path
     #sed -r "s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1
-    if isLocal
+    if $isLocal
     then 
       sed -r "/^\/\/bg=(#|http)/!  s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1 
       mv tmp.1 tmp.md
@@ -71,6 +70,8 @@ case "$action" in
     fulltmpdir=/tmp/$tmpdir
     prepareFramework $script_dir $fulltmpdir
 
+    trap "echo 'Cleaning up...'; rm -r $fulltmpdir; exit" SIGINT SIGQUIT
+
     firsttime=true;
 
     while true 
@@ -83,7 +84,8 @@ case "$action" in
         firsttime=false;
       fi 
 
-      inotifywait -e close_write $srcmd ;
+      inotifywait -q -e close_write $srcmd ;
+      echo "Updated: file://"$fulltmpdir/$srcmd.html;
     done
     ;;
   "deploy")
