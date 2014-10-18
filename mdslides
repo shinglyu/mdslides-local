@@ -28,10 +28,10 @@ prepareFramework(){
     destdir=$2;
     #Copy reveal.js framework to temp dir
     mkdir $destdir
-    pushd $frameworkdir;
-    rsync -r --exclude=.git --exclude=*.sh --exclude=mdslides . $destdir;
+    pushd $frameworkdir >> /dev/null
+    rsync -q -r --exclude=.git --exclude=*.sh --exclude=mdslides . $destdir;
     mkdir $destdir/pic;
-    popd;
+    popd >> /dev/null
 }
 
 
@@ -42,7 +42,7 @@ compile(){
     cp $srcmd $destdir/tmp.md;
     cp pic/* $destdir/pic/;
 
-    pushd $destdir;
+    pushd $destdir >> /dev/null
 
     #Convert bg path to full path
     #sed -r "s|\/\/bg=(.*)|<\!-- .slide:data-background=\"file:\/\/\/$destdir\/\1\" -->|g" tmp.md > tmp.1
@@ -62,10 +62,11 @@ compile(){
     sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/template.html> $destdir/$srcmd.html ;
     #echo "$1.html refreshed.";
 
-    popd;
+    popd >> /dev/null
 }
 
 script_dir=${0%/*}
+
 case "$action" in
   "serve" | "s") 
     if [ $# -lt 2  ]
@@ -76,7 +77,7 @@ case "$action" in
     fulltmpdir=/tmp/$tmpdir
     prepareFramework $script_dir $fulltmpdir
 
-    trap "echo 'Cleaning up...'; rm -r $fulltmpdir; exit" SIGINT SIGQUIT
+    trap "echo ' Cleaning up...'; rm -r $fulltmpdir; exit" SIGINT SIGQUIT
 
     firsttime=true;
 
@@ -95,9 +96,9 @@ case "$action" in
     done
     ;;
   "deploy" | "d")
-    pushd $script_dir
+    pushd $script_dir >> /dev/null
     source config.sh
-    popd
+    popd >> /dev/null
 
     fulltmpdir=$dropbox_public_dir/$tmpdir
     prepareFramework $script_dir $fulltmpdir
