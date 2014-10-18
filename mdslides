@@ -61,7 +61,7 @@ compile(){
 
 script_dir=${0%/*}
 case "$action" in
-  "serve") 
+  "serve" | "s") 
     if [ $# -lt 2  ]
     then
       printHelp
@@ -88,7 +88,7 @@ case "$action" in
       echo "Updated: file://"$fulltmpdir/$srcmd.html;
     done
     ;;
-  "deploy")
+  "deploy" | "d")
     pushd $script_dir
     source config.sh
     popd
@@ -100,7 +100,7 @@ case "$action" in
     echo "Your slides are published to:"
     echo "$dropbox_public_url_prefix/$tmpdir/$srcmd.html"
     ;;
-  "init")
+  "init" | "i")
     cp $script_dir/template.md .
     # create pic folder?
     ;;
