@@ -6,8 +6,14 @@ tmpdir=slides-$(date +%s%N |md5sum |cut -c 1-6)
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
 
 printHelp(){
-  echo "No markdown file specified."
-  echo "Usage: md2reveal.sh <md-file>"
+  echo "Invalid argurment(s)"
+  echo "Usage: mdslides <action> [<md-file>]"
+  echo " "
+  echo "Actions:"
+  echo "  init   or i  create a template.md file"
+  echo "  serve  or s  serve the specified md file using local server"
+  echo "  deploy or d  deploy to dropbox"
+  echo "  help   or h  print this helpful message"
 }
 
 if [ $# -lt 1  ]
@@ -103,6 +109,11 @@ case "$action" in
   "init" | "i")
     cp $script_dir/template.md .
     # create pic folder?
+    echo "template.md created."
+    ;;
+
+  "help" | "h")
+    printHelp
     ;;
   *)  
       echo "Invalid action: " $action
