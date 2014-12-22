@@ -6,7 +6,7 @@ tmpdir=slides-$(date +%s%N |md5sum |cut -c 1-6)
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
 
 printHelp(){
-  echo "Invalid argurment(s)"
+  #echo "Invalid argurment(s)"
   echo "Usage: mdslides <action> [<md-file>]"
   echo " "
   echo "Actions:"
@@ -71,6 +71,7 @@ case "$action" in
   "serve" | "s") 
     if [ $# -lt 2  ]
     then
+      echo "You need to specify the markdown filename"
       printHelp
       exit
     fi
@@ -96,6 +97,12 @@ case "$action" in
     done
     ;;
   "deploy" | "d")
+    if [ $# -lt 2  ]
+    then
+      echo "You need to specify the markdown filename"
+      printHelp
+      exit
+    fi
     pushd $script_dir >> /dev/null
     source config.sh
     popd >> /dev/null
