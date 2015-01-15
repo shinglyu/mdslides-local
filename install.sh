@@ -1,7 +1,8 @@
 #!/bin/bash
 sudo apt-get update;
-sudo apt-get install realpath inotify-tools;
-scriptdir=$(realpath ${0%/*});
+sudo apt-get install realpath inotify-tools -y;
+#scriptdir=$(realpath${0%/*});
+scriptdir=$(realpath $(dirname $0));
 #shrc=$HOME'/.bashrc'
 shrc=$HOME'/.zshrc'
 
