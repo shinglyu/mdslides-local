@@ -126,7 +126,14 @@ case "$action" in
     fulltmpdir=$dropbox_public_dir/$tmpdir
     #FIXME
     prepareFramework $fulltmpdir
-    cp -r $local_lib_dir $public_lib_dir
+    if [ ! -d "$public_lib_dir"  ] 
+    then
+      # Don't copy lib if already exists
+      echo "Copying the lib"
+      cp -r $local_lib_dir $public_lib_dir
+    else
+      echo "Reusing old lib. If you find the lib is not up-to-date, delete the mdslides folder in the public folder and run again."
+    fi
     compile $srcmd $fulltmpdir false
 
     echo "Your slides are published to:"
