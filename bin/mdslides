@@ -126,7 +126,7 @@ case "$action" in
     echo "$dropbox_public_url_prefix/$tmpdir/$srcmd.html"
     ;;
   "init" | "i")
-    cp $script_dir/template.md .
+    cp $script_dir/custom/template.md .
     # create pic folder?
     echo "template.md created."
     ;;
