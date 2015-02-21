@@ -1,0 +1,21 @@
+{
+  "name": "mdslides-local",
+  "version": "0.0.1",
+  "homepage": "https://github.com/shinglyu/mdslides-local",
+  "authors": [
+    "Shing Lyu <shing.lyu@gmail.com>"
+  ],
+  "description": "Creating slideshows using Markdown",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "reveal.js": "~3.0.0",
+    "jquery": "~2.1.3"
+  }
+}

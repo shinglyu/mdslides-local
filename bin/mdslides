@@ -2,6 +2,10 @@
 action=$1
 srcmd=$2
 tmpdir=slides-$(date +%s%N |md5sum |cut -c 1-6) 
+script_dir=${0%/*}/..
+lib_dir=$script_dir/bower_components/reveal.js
+lib_dist_dir=/tmp/mdslides
+
 
 #Cleanup temp dir on exit (Ctrl+C or Ctrl+\)
 
@@ -24,14 +28,20 @@ fi
 #echo "mdslides started"
 
 prepareFramework(){
-    frameworkdir=$1;
-    destdir=$2;
-    #Copy reveal.js framework to temp dir
-    mkdir $destdir
-    pushd $frameworkdir >> /dev/null
-    rsync -q -r --exclude=.git --exclude=*.sh --exclude=mdslides . $destdir;
-    mkdir $destdir/pic;
-    popd >> /dev/null
+  echo "Copying lib file..."
+  destdir=$1;
+  #Copy reveal.js framework to temp dir
+  mkdir $destdir
+  mkdir $destdir/pic;
+  mkdir $lib_dist_dir
+  pushd $script_dir >> /dev/null
+  cp -r ./bower_components/reveal.js/* $lib_dist_dir
+  cp -r ./bower_components/jquery/dist/jquery.min.js $lib_dist_dir/lib/js/
+  # TODO: copy jquery
+  cp -r ./custom/* $lib_dist_dir # for /js/
+  cp -r ./custom/* $destdir # for templates
+  popd >> /dev/null
+  echo "Done"
 }
 
 
@@ -65,7 +75,6 @@ compile(){
     popd >> /dev/null
 }
 
-script_dir=${0%/*}
 
 case "$action" in
   "serve" | "s") 
@@ -76,7 +85,7 @@ case "$action" in
       exit
     fi
     fulltmpdir=/tmp/$tmpdir
-    prepareFramework $script_dir $fulltmpdir
+    prepareFramework $fulltmpdir
 
     trap "echo ' Cleaning up...'; rm -r $fulltmpdir; exit" SIGINT SIGQUIT
 
@@ -88,6 +97,7 @@ case "$action" in
 
       if $firsttime
       then
+        echo "opening firefox"
         firefox $fulltmpdir/$srcmd.html;
         firsttime=false;
       fi 
@@ -108,6 +118,7 @@ case "$action" in
     popd >> /dev/null
 
     fulltmpdir=$dropbox_public_dir/$tmpdir
+    #FIXME
     prepareFramework $script_dir $fulltmpdir
     compile $srcmd $fulltmpdir false
 

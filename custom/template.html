@@ -14,11 +14,12 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="css/reveal.min.css">
-    <link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="../mdslides/css/reveal.css">
+    <!--<link rel="stylesheet" href="../mdslides/css/theme/default.css" id="theme">-->
+    <link rel="stylesheet" href="../mdslides/css/theme/night.css" id="theme">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="../mdslides/lib/css/zenburn.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -42,9 +43,9 @@
       </div>
     </div>
 
-    <script src="lib/js/head.min.js"></script>
-    <script src="js/reveal.min.js"></script>
-    <script src="js/jquery-2.0.3.min.js"></script>
+    <script src="../mdslides/lib/js/head.min.js"></script>
+    <script src="../mdslides/js/reveal.js"></script>
+    <script src="../mdslides/lib/js/jquery.min.js"></script>
 
     <script>
 
@@ -63,13 +64,13 @@
 
         // Optional libraries used to extend on reveal.js
         dependencies: [
-          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: 'plugin/math/math.js'},
+          { src: '../mdslides/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: '../mdslides/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../mdslides/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: '../mdslides/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: '../mdslides/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: '../mdslides/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: '../mdslides/plugin/math/math.js'},
         ]
       });
     }
@@ -77,6 +78,6 @@
     initReveal();
 
     </script>
-    <script src="js/image-size.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../mdslides/custom/image-size.js" type="text/javascript" charset="utf-8"></script>
   </body>
 </html>
