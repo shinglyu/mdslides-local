@@ -34,6 +34,8 @@ slugifyTitle(){
   # Thank https://automatthias.wordpress.com/2007/05/21/slugify-in-a-shell-script/ for this line
   egrep -m 1 . $input_file| sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z
 }
+title=$(slugifyTitle $srcmd)
+echo $title
 
 prepareFramework(){
   echo "Copying lib file..."
@@ -79,7 +81,10 @@ compile(){
     sed -i "/^\/\/.*$/d" tmp.md
 
     #Put the content into the template
-    sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/template.html> $destdir/$srcmd.html ;
+    # echo $(slugifyTitle $srcmd)
+    # cat $srcmd
+    sed -r "s/\{\{HTML-TITLE\}\}/$title/g" $destdir/template.html > $destdir/tmp.template
+    sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/tmp.template > $destdir/$srcmd.html ;
     #echo "$1.html refreshed.";
 
     popd >> /dev/null
@@ -94,7 +99,7 @@ case "$action" in
       printHelp
       exit
     fi
-    tmpdir=$tmpdir-$(slugifyTitle $srcmd)
+    tmpdir=$tmpdir-$title
     fulltmpdir=/tmp/$tmpdir
     prepareFramework $fulltmpdir
 
@@ -129,7 +134,7 @@ case "$action" in
     source config.sh
     popd >> /dev/null
 
-    tmpdir=$tmpdir-$(slugifyTitle $srcmd)
+    tmpdir=$tmpdir-$title
     fulltmpdir=$dropbox_public_dir/$tmpdir
     #FIXME
     prepareFramework $fulltmpdir
