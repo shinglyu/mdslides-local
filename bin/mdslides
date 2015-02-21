@@ -29,13 +29,17 @@ then
   exit
 fi
 #echo "mdslides started"
+getTitle(){
+  input_file=$1
+  egrep -m 1 . $input_file
+}
 slugifyTitle(){
   input_file=$1
   # Thank https://automatthias.wordpress.com/2007/05/21/slugify-in-a-shell-script/ for this line
-  egrep -m 1 . $input_file| sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z
+  getTitle $input_file| sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z
 }
 title=$(slugifyTitle $srcmd)
-echo $title
+title_human_readable=$(getTitle $srcmd)
 
 prepareFramework(){
   echo "Copying lib file..."
@@ -83,7 +87,7 @@ compile(){
     #Put the content into the template
     # echo $(slugifyTitle $srcmd)
     # cat $srcmd
-    sed -r "s/\{\{HTML-TITLE\}\}/$title/g" $destdir/template.html > $destdir/tmp.template
+    sed -r "s/\{\{HTML-TITLE\}\}/$title_human_readable/g" $destdir/template.html > $destdir/tmp.template
     sed -e "/Your content will be here./r tmp.md" -e "//d" $destdir/tmp.template > $destdir/$srcmd.html ;
     #echo "$1.html refreshed.";
 
@@ -110,6 +114,8 @@ case "$action" in
     while true 
     do 
       compile $srcmd $fulltmpdir true
+
+      echo "Updated: file://"$fulltmpdir/$srcmd.html;
 
       if $firsttime
       then

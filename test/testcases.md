@@ -41,3 +41,10 @@ THEN a zoomed out view will appear
 WHEN press "->" and "<-" to move, then press ESC
 THEN should go back to the page in the middle
 
+----------------------------
+
+TEST THAT Verify the HTML title and dir title
+
+-----------------------------
+
+TEST THAT Slides update when md file updates
