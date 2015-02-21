@@ -38,8 +38,12 @@ slugifyTitle(){
   # Thank https://automatthias.wordpress.com/2007/05/21/slugify-in-a-shell-script/ for this line
   getTitle $input_file| sed -e 's/[^[:alnum:]]/-/g' | tr -s '-' | tr A-Z a-z
 }
-title=$(slugifyTitle $srcmd)
-title_human_readable=$(getTitle $srcmd)
+echo "Check"
+if [ $# -ge 2  ]
+then
+  title=$(slugifyTitle $srcmd)
+  title_human_readable=$(getTitle $srcmd)
+fi
 
 prepareFramework(){
   echo "Copying lib file..."

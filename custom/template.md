@@ -17,13 +17,17 @@
 3. Windows
 
 ---
+
 ##Empahsis
 
-```
-_Italic_
-__Bold__   
-~~Strikethrough~~
-```
+
+|   You write  |   You get   | 
+|:------------:|:----------:| 
+|  `_Italic_`  |  _Italic_  |
+|  `__Bold__`  |  __Bold__  |
+| `~~Strike~~` | ~~Strike~~ |
+
+
 
 ---
 
