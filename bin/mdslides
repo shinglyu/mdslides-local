@@ -135,6 +135,7 @@ case "$action" in
     #################################################################
   "init" | "i")
     cp $script_dir/custom/template.md .
+    mkdir pic
     # create pic folder?
     echo "template.md created."
     ;;
