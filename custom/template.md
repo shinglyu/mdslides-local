@@ -90,3 +90,8 @@ $ \frac{x^2+y_f}{\sqrt{\pi}} = 3.198272$
 > -- Alan Turing
 
 ---
+
+## Embed Youtube
+
+<iframe width="420" height="315" src="https://www.youtube.com/embed/GRW8mv3GnDA" frameborder="0" allowfullscreen></iframe>
+
