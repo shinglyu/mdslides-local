@@ -48,3 +48,13 @@ TEST THAT Verify the HTML title and dir title
 -----------------------------
 
 TEST THAT Slides update when md file updates
+
+-----------------------------
+
+TEST THAT Images resized correctly
+
+WHEN run `mdslides s test.md` in `test/test-img-resize`
+THEN A Firefox window will show up
+
+WHEN Slide through each page
+THEN Each image should be fill the available window space, but do not overflow
