@@ -98,6 +98,33 @@ compile(){
     popd >> /dev/null
 }
 
+refreshBrowser(){
+  title=$1
+  key="F5"
+
+  # if was empty, default set to name of browser, firefox/chrome/opera/etc..
+  if [ -z "${title}"  ]; then
+    title=firefox
+  fi
+
+  # get which window is active right now
+  currwin=$(xdotool getactivewindow)
+  #
+  # bring up the browser
+  echo "Refreshing the browser"
+  xdotool search --name ${title} windowactivate --sync
+  # send the page-reload keys (C-R) or (S-C-R)
+  xdotool search --name ${title} key --clearmodifiers ${key}
+  #
+  # sometimes the focus doesn't work, so follow up with activate
+  echo "Going back to previously focused window"
+  xdotool windowfocus --sync ${currwin}
+  echo "half"
+  #xdotool windowactivate --sync ${currwin}
+  echo "Done"
+  
+}
+
 
 case "$action" in
   "serve" | "s") 
@@ -126,6 +153,8 @@ case "$action" in
         echo "opening firefox"
         firefox $fulltmpdir/$srcmd.html;
         firsttime=false;
+      else
+        refreshBrowser $title_human_readable
       fi 
 
       inotifywait -q -e close_write $srcmd ;
