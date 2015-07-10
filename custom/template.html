@@ -14,13 +14,13 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <link rel="stylesheet" href="../mdslides/css/reveal.css">
+    <link rel="stylesheet" href="./mdslides/css/reveal.css">
     <!--<link rel="stylesheet" href="../mdslides/css/theme/default.css" id="theme">-->
     <!--<link rel="stylesheet" href="../mdslides/css/theme/night.css" id="theme">-->
-    <link rel="stylesheet" href="../mdslides/css/theme/slyu.css" id="theme">
+    <link rel="stylesheet" href="./mdslides/css/theme/slyu.css" id="theme">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="../mdslides/lib/css/zenburn.css">
+    <link rel="stylesheet" href="./mdslides/lib/css/zenburn.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -38,15 +38,16 @@
       <div class="slides">
         <section data-markdown data-separator="^\n---\n" data-vertical="^\n-----\n">
           <script type="text/template">
-          #Your content will be here.
+<!-- inject:md -->
+<!-- endinject -->
           </script>
         </section>
       </div>
     </div>
 
-    <script src="../mdslides/lib/js/head.min.js"></script>
-    <script src="../mdslides/js/reveal.js"></script>
-    <script src="../mdslides/lib/js/jquery.min.js"></script>
+    <script src="./mdslides/lib/js/head.min.js"></script>
+    <script src="./mdslides/js/reveal.js"></script>
+    <script src="./mdslides/lib/js/jquery.min.js"></script>
 
     <script>
 
@@ -65,13 +66,13 @@
 
         // Optional libraries used to extend on reveal.js
         dependencies: [
-          { src: '../mdslides/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '../mdslides/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: '../mdslides/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: '../mdslides/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          { src: '../mdslides/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: '../mdslides/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-          { src: '../mdslides/plugin/math/math.js'},
+          { src: './mdslides/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: './mdslides/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: './mdslides/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: './mdslides/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: './mdslides/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: './mdslides/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: './mdslides/plugin/math/math.js'},
         ]
       });
     }
@@ -79,6 +80,6 @@
     initReveal();
 
     </script>
-    <script src="../mdslides/js/image-size.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./mdslides/js/image-size.js" type="text/javascript" charset="utf-8"></script>
   </body>
 </html>
