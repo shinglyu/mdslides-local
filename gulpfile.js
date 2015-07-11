@@ -7,11 +7,13 @@ var gulp_filter = require('gulp-filter');
 var path = require('path');
 var del = require('del')
 var open = require('gulp-open')
+var webpack = require('webpack')
+var gutil = require('gulp-util')
 
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
 
-gulp.task('default', ['clean'], function() {
+gulp.task('default', ['clean', 'webpack'], function() {
   
 
   //gulp.src(path.join(md_loc, '*')).pipe(debug())
@@ -24,12 +26,13 @@ gulp.task('default', ['clean'], function() {
 
 
   //Copying lib files => Should be removed after webpack is ready
-  gulp.src([path.join(gulpfile_path, 'bower_components', 'reveal.js', '**', '**', '*'),
-            path.join(gulpfile_path, 'custom', '**', '*')])
-      .pipe(gulp.dest(path.join(dest_lib_path)))
+  //gulp.src([path.join(gulpfile_path, 'bower_components', 'reveal.js', '**', '**', '*'),
+  //          path.join(gulpfile_path, 'custom', '**', '*')])
+  gulp.src([path.join(gulpfile_path, 'bower_components', 'reveal.js', 'plugin', '**', '*')])
+      .pipe(gulp.dest(path.join(dest_lib_path, 'plugin')))
 
-  gulp.src([path.join(gulpfile_path, 'bower_components', 'jquery', 'dist', 'jquery.min.js')])
-      .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
+  //gulp.src([path.join(gulpfile_path, 'bower_components', 'jquery', 'dist', 'jquery.min.js')])
+  //    .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
 
   //Sources
   var exclude = gulp_filter(['*','!README.md']);
@@ -54,4 +57,28 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('clean', function(cb) {
   del([path.join(md_path, 'dist')], {'force': true}, cb)
+})
+
+gulp.task('webpack', function(cb) {
+  webpack({
+      entry: "./custom/entry.js",
+      output: {
+        //path: __dirname,
+        path: path.join(md_path, "dist"),
+        filename: "bundle.js"
+
+      },
+      module: {
+        loaders: [
+          { test: /\.css$/, loader: "style!css"  }
+        ]
+      }
+    }, function(err, stats){
+      if(err) throw new gutil.PluginError("webpack", err);
+      gutil.log("[webpack]", stats.toString({
+        // output options
+      }));
+      cb();
+    }
+  )
 })
