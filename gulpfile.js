@@ -66,13 +66,26 @@ gulp.task('webpack', function(cb) {
         //path: __dirname,
         path: path.join(md_path, "dist"),
         filename: "bundle.js"
-
       },
       module: {
         loaders: [
           { test: /\.css$/, loader: "style!css"  }
         ]
-      }
+      },
+      /*
+      resolve: { 
+        alias: { 
+          jquery: "../bower_components/jquery/dist/jquery.min.js"
+        }  
+      },
+      plugins: [
+        new webpack.ProvidePlugin({
+          $: 'jquery',
+          //_: 'underscore',
+          //React: 'react/addons',
+        })
+      ],
+      */
     }, function(err, stats){
       if(err) throw new gutil.PluginError("webpack", err);
       gutil.log("[webpack]", stats.toString({

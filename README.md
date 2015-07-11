@@ -17,3 +17,6 @@ cd my-awesome-slides
 * Run `mdslides serve template.md`, and you can see the result
 * Edit `bin/config.sh` to set your own Dropbox folder and URL.
 * Run `mdslides deploy template.md` to deploy it to Dropbox.
+
+#Hacking the template
+* Most of the js/css dependencies are written in `./custom/entry.js`, and are bundled by webpack. 
