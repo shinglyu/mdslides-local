@@ -7,6 +7,9 @@ var gulp_filter = require('gulp-filter');
 var path = require('path');
 var del = require('del')
 var open = require('gulp-open')
+var through = require('through2')
+var slug = require('slug')
+var rename = require('gulp-rename')
 
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
@@ -32,9 +35,16 @@ gulp.task('default', ['clean'], function() {
       .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
 
   //Sources
+  var file_name
   var exclude = gulp_filter(['*','!README.md']);
   var content = gulp.src([path.join(md_path, '*.md')])
                     .pipe(exclude)
+                    
+  content.pipe(through.obj(function(file, enc, callback) {
+    first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
+    file_name = slug(first_non_empty_line, "_")
+    callback()
+  }))
 
   var template = gulp.src(path.join(gulpfile_path, 'custom', 'template.html'))
 
@@ -46,6 +56,10 @@ gulp.task('default', ['clean'], function() {
     }))
     .pipe(replace(/<!-- inject:md -->/g, ''))
     .pipe(replace(/<!-- endinject -->/g, ''))
+    .pipe(rename(function(path) {
+      path.basename = file_name
+      path.extname = ".html"
+    }))
     .pipe(dest)
     .pipe(open('<%=file.path%>', {app: 'firefox'}))
     //.pipe(debug())
@@ -55,3 +69,12 @@ gulp.task('default', ['clean'], function() {
 gulp.task('clean', function(cb) {
   del([path.join(md_path, 'dist')], {'force': true}, cb)
 })
+
+function getFirstNonEmptyLine(contents) {
+    for(var i = 0; i < contents.length; i++) {
+      var current_line = contents[i].replace("#", "").trim()
+      if(current_line != "") {
+        return current_line
+      }
+    }
+}
