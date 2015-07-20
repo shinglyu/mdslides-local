@@ -10,13 +10,16 @@ var open = require('gulp-open')
 var through = require('through2')
 var slug = require('slug')
 var rename = require('gulp-rename')
+var html_replace = require('gulp-html-replace')
 
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
 
-gulp.task('default', ['clean'], function() {
-  
+var content
+var file_name
 
+gulp.task('default', ['clean', 'get-filename'], function() {
+  
   //gulp.src(path.join(md_loc, '*')).pipe(debug())
   //gulp.src(path.join(gulpfile_path, 'custom', '**', '*')).pipe(debug())
   //gulp.src(path.join(gulpfile_path, 'custom', '**', '*')).pipe(debug())
@@ -34,17 +37,9 @@ gulp.task('default', ['clean'], function() {
   gulp.src([path.join(gulpfile_path, 'bower_components', 'jquery', 'dist', 'jquery.min.js')])
       .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
 
-  //Sources
-  var file_name
-  var exclude = gulp_filter(['*','!README.md']);
-  var content = gulp.src([path.join(md_path, '*.md')])
-                    .pipe(exclude)
-                    
-  content.pipe(through.obj(function(file, enc, callback) {
-    first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
-    file_name = slug(first_non_empty_line, "_")
-    callback()
-  }))
+  if(content == undefined) {
+    getContent()
+  }
 
   var template = gulp.src(path.join(gulpfile_path, 'custom', 'template.html'))
 
@@ -60,15 +55,40 @@ gulp.task('default', ['clean'], function() {
       path.basename = file_name
       path.extname = ".html"
     }))
+    .pipe(html_replace({
+      title: {
+        src: String(file_name),
+        tpl: '<title>%s</title>'
+      }
+    }))
     .pipe(dest)
     .pipe(open('<%=file.path%>', {app: 'firefox'}))
-    //.pipe(debug())
+    .pipe(debug())
 
+})
+
+gulp.task('get-filename', function(cb) {
+  if(content == undefined) {
+    getContent()
+  }
+  content.pipe(through.obj(function(file, enc, callback) {
+    first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
+    file_name = slug(first_non_empty_line, "_")
+    console.log("Found title: " + file_name)
+    callback()
+  }))
+  cb()
 })
 
 gulp.task('clean', function(cb) {
   del([path.join(md_path, 'dist')], {'force': true}, cb)
 })
+
+function getContent() {
+  var exclude = gulp_filter(['*','!README.md']);
+  content = gulp.src([path.join(md_path, '*.md')])
+                    .pipe(exclude)
+}
 
 function getFirstNonEmptyLine(contents) {
     for(var i = 0; i < contents.length; i++) {
