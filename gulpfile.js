@@ -37,10 +37,6 @@ gulp.task('default', ['clean', 'get-filename'], function() {
   gulp.src([path.join(gulpfile_path, 'bower_components', 'jquery', 'dist', 'jquery.min.js')])
       .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
 
-  if(content == undefined) {
-    getContent()
-  }
-
   var template = gulp.src(path.join(gulpfile_path, 'custom', 'template.html'))
 
   //Injecting the content into the template
@@ -67,7 +63,7 @@ gulp.task('default', ['clean', 'get-filename'], function() {
 
 })
 
-gulp.task('get-filename', function(cb) {
+gulp.task('get-filename',['clean'], function(cb) {
   if(content == undefined) {
     getContent()
   }
