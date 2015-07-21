@@ -10,7 +10,6 @@ var open = require('gulp-open')
 var through = require('through2')
 var slug = require('slug')
 var rename = require('gulp-rename')
-var html_replace = require('gulp-html-replace')
 
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
@@ -50,12 +49,7 @@ gulp.task('default', ['clean', 'get-filename'], function() {
       path.basename = file_name
       path.extname = ".html"
     }))
-    .pipe(html_replace({
-      title: {
-        src: String(file_name),
-        tpl: '<title>%s</title>'
-      }
-    }))
+    .pipe(replace("{{HTML-TITLE}} - MDSlides", file_name))
     .pipe(dest)
     .pipe(open('<%=file.path%>', {app: 'firefox'}))
     //.pipe(debug())
