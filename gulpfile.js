@@ -15,7 +15,6 @@ var html_replace = require('gulp-html-replace')
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
 
-var content
 var file_name
 
 gulp.task('default', ['clean', 'get-filename'], function() {
@@ -40,7 +39,7 @@ gulp.task('default', ['clean', 'get-filename'], function() {
   var template = gulp.src(path.join(gulpfile_path, 'custom', 'template.html'))
 
   //Injecting the content into the template
-  template.pipe(inject(content,{
+  template.pipe(inject(getContent(),{
       transform: function (filePath, file) {
          return file.contents.toString('utf8')
       }
@@ -59,15 +58,12 @@ gulp.task('default', ['clean', 'get-filename'], function() {
     }))
     .pipe(dest)
     .pipe(open('<%=file.path%>', {app: 'firefox'}))
-    .pipe(debug())
+    //.pipe(debug())
 
 })
 
-gulp.task('get-filename',['clean'], function(cb) {
-  if(content == undefined) {
-    getContent()
-  }
-  content.pipe(through.obj(function(file, enc, callback) {
+gulp.task('get-filename', function(cb) {
+  getContent().pipe(through.obj(function(file, enc, callback) {
     first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
     file_name = slug(first_non_empty_line, "_")
     console.log("Found title: " + file_name)
@@ -82,7 +78,7 @@ gulp.task('clean', function(cb) {
 
 function getContent() {
   var exclude = gulp_filter(['*','!README.md']);
-  content = gulp.src([path.join(md_path, '*.md')])
+  return gulp.src([path.join(md_path, '*.md')])
                     .pipe(exclude)
 }
 
