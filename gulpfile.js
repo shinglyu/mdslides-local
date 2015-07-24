@@ -14,9 +14,10 @@ var rename = require('gulp-rename')
 var md_path = process.env.INIT_CWD //#the initial directory
 var gulpfile_path = process.cwd() //#gulpfile.js location
 
-gulp.task('default', ['clean'], function() {
-  
+var file_name
 
+gulp.task('default', ['clean', 'get-filename'], function() {
+  
   //gulp.src(path.join(md_loc, '*')).pipe(debug())
   //gulp.src(path.join(gulpfile_path, 'custom', '**', '*')).pipe(debug())
   //gulp.src(path.join(gulpfile_path, 'custom', '**', '*')).pipe(debug())
@@ -34,22 +35,10 @@ gulp.task('default', ['clean'], function() {
   gulp.src([path.join(gulpfile_path, 'bower_components', 'jquery', 'dist', 'jquery.min.js')])
       .pipe(gulp.dest(path.join(dest_lib_path, 'lib', 'js')))
 
-  //Sources
-  var file_name
-  var exclude = gulp_filter(['*','!README.md']);
-  var content = gulp.src([path.join(md_path, '*.md')])
-                    .pipe(exclude)
-                    
-  content.pipe(through.obj(function(file, enc, callback) {
-    first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
-    file_name = slug(first_non_empty_line, "_")
-    callback()
-  }))
-
   var template = gulp.src(path.join(gulpfile_path, 'custom', 'template.html'))
 
   //Injecting the content into the template
-  template.pipe(inject(content,{
+  template.pipe(inject(getContent(),{
       transform: function (filePath, file) {
          return file.contents.toString('utf8')
       }
@@ -60,15 +49,32 @@ gulp.task('default', ['clean'], function() {
       path.basename = file_name
       path.extname = ".html"
     }))
+    .pipe(replace("{{HTML-TITLE}} - MDSlides", file_name))
     .pipe(dest)
     .pipe(open('<%=file.path%>', {app: 'firefox'}))
     //.pipe(debug())
 
 })
 
+gulp.task('get-filename', function(cb) {
+  getContent().pipe(through.obj(function(file, enc, callback) {
+    first_non_empty_line = getFirstNonEmptyLine(String(file.contents).split("\n"))
+    file_name = slug(first_non_empty_line, "_")
+    console.log("Found title: " + file_name)
+    callback()
+  }))
+  cb()
+})
+
 gulp.task('clean', function(cb) {
   del([path.join(md_path, 'dist')], {'force': true}, cb)
 })
+
+function getContent() {
+  var exclude = gulp_filter(['*','!README.md']);
+  return gulp.src([path.join(md_path, '*.md')])
+                    .pipe(exclude)
+}
 
 function getFirstNonEmptyLine(contents) {
     for(var i = 0; i < contents.length; i++) {
