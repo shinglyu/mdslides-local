@@ -70,6 +70,10 @@ gulp.task('clean', function(cb) {
   del([path.join(md_path, 'dist')], {'force': true}, cb)
 })
 
+gulp.task('watch', ['default'], function() {
+  gulp.watch([path.join(md_path, '*.md')], ['default'])
+})
+
 function getContent() {
   var exclude = gulp_filter(['*','!README.md']);
   return gulp.src([path.join(md_path, '*.md')])
