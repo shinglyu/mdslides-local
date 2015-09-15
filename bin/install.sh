@@ -1,6 +1,7 @@
 #!/bin/bash
 sudo apt-get update;
 sudo apt-get install realpath inotify-tools -y;
+sudo npm install -g live-server
 #scriptdir=$(realpath${0%/*});
 scriptdir=$(realpath $(dirname $0));
 #shrc=$HOME'/.bashrc'

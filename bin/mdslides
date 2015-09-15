@@ -153,8 +153,10 @@ case "$action" in
         echo "opening firefox"
         firefox $fulltmpdir/$srcmd.html;
         firsttime=false;
-      else
-        refreshBrowser $title_human_readable
+        echo /$srcmd.html
+        live-server $fulltmpdir/../ --open=$tmpdir/$srcmd.html &
+      #else
+        #refreshBrowser $title_human_readable
       fi 
 
       inotifywait -q -e close_write $srcmd ;
