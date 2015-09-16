@@ -52,14 +52,16 @@ prepareFramework(){
   #Copy reveal.js framework to temp dir
   mkdir $destdir
   mkdir $destdir/pic;
-  mkdir $local_lib_dir
+  #mkdir $local_lib_dir
+  mkdir $destdir/mdslides
+  mkdir $destdir/dist
   pushd $script_dir >> /dev/null
-  cp -r ./bower_components/reveal.js/* $local_lib_dir
-  cp -r ./bower_components/jquery/dist/jquery.min.js $local_lib_dir/lib/js/
+  cp -r ./bower_components/reveal.js/* $destdir/mdslides
+  cp -r ./bower_components/jquery/dist/jquery.min.js $destdir/mdslides/lib/js/
   # TODO: copy jquery
-  cp -r ./custom/* $local_lib_dir # for /js/
+  cp -r ./custom/* $destdir/mdslides # for /js/
 
-  cp -r ./custom/* $destdir # for templates
+  cp -r ./custom/* $destdir/dist # for templates
   popd >> /dev/null
   echo "Done"
 }
@@ -144,7 +146,7 @@ case "$action" in
 
     while true 
     do 
-      compile $srcmd $fulltmpdir true
+      compile $srcmd $fulltmpdir/dist true
 
       echo "Updated: file://"$fulltmpdir/$srcmd.html;
 
@@ -154,7 +156,7 @@ case "$action" in
         firefox $fulltmpdir/$srcmd.html;
         firsttime=false;
         echo /$srcmd.html
-        live-server $fulltmpdir/../ --open=$tmpdir/$srcmd.html &
+        live-server $fulltmpdir --open=dist/$srcmd.html &
       #else
         #refreshBrowser $title_human_readable
       fi 
